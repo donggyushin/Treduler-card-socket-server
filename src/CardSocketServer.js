@@ -19,10 +19,21 @@ io.on('connection', socket => {
         socket.userEmail = userEmail;
         socket.cardId = cardId;
         clients.push(socket);
-        console.log('User connected: ', userEmail, cardId);
+        console.log('User login: ', userEmail, cardId);
     })
 
-    socket.on('disconnection', () => {
+    socket.on('leave-card-detail', () => {
+        console.log('user disconnected', socket.userEmail, socket.cardId)
+        clients = clients.filter(client => {
+            if (client.userEmail === socket.userEmail && client.cardId === socket.cardId) {
+                return false;
+            } else {
+                return true;
+            }
+        })
+    })
+
+    socket.on('disconnect', () => {
         console.log('user disconnected', socket.userEmail, socket.cardId)
         clients = clients.filter(client => {
             if (client.userEmail === socket.userEmail && client.cardId === socket.cardId) {
