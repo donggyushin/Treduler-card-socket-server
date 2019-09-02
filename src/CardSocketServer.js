@@ -27,8 +27,12 @@ io.on('connection', socket => {
             }
         })
 
-        clients.push(socket);
-        console.log('User login: ', userEmail, cardId);
+        if (exist === false) {
+
+            clients.push(socket);
+            console.log('User login: ', userEmail, cardId);
+
+        }
 
 
     })
@@ -145,26 +149,30 @@ io.on('connection', socket => {
         })
     })
 
-    socket.on('leave-card-detail', () => {
-        console.log('user disconnected', socket.userEmail, socket.cardId)
-        clients = clients.filter(client => {
-            if (client.userEmail === socket.userEmail && client.cardId === socket.cardId) {
+    socket.on('leave-card-detail', (data) => {
+        console.log('1')
+        console.log('user disconnected', data.userEmail, data.cardId)
+        const updatedClients = clients.filter(client => {
+            if (client.userEmail === data.userEmail && client.cardId === data.cardId) {
                 return false;
             } else {
                 return true;
             }
         })
+        clients = updatedClients
     })
 
     socket.on('disconnect', () => {
+        console.log('2')
         console.log('user disconnected', socket.userEmail, socket.cardId)
-        clients = clients.filter(client => {
+        const updatedClients = clients.filter(client => {
             if (client.userEmail === socket.userEmail && client.cardId === socket.cardId) {
                 return false;
             } else {
                 return true;
             }
         })
+        clients = updatedClients
 
     })
 })
