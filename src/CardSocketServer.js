@@ -1,14 +1,21 @@
 import express from 'express';
 import http from 'http';
 import socketIO from 'socket.io';
+import fs from 'fs';
+const credentials = {
+    key: fs.readFileSync(__dirname + '/privkey.pem'),
+    cert: fs.readFileSync(__dirname + '/cert.pem'),
+    ca: fs.readFileSync(__dirname + '/chain.pem')
+}
 
 const PORT = 8082
 
 const app = express()
 
 const server = http.createServer(app);
+const httpServer = require('https').createServer(credentials, app);
 
-const io = socketIO(server);
+const io = socketIO(httpServer);
 
 let clients = []
 
@@ -177,4 +184,4 @@ io.on('connection', socket => {
     })
 })
 
-server.listen(PORT, () => console.log(`Card socket server listening on port ${PORT}`))
+httpServer.listen(PORT, () => console.log(`Card socket server listening on port ${PORT}`))
