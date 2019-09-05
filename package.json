@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "babel --presets es2015 -d dist/ src",
-    "start": "node dist/CardSocketServer.js &",
+    "start": "NODE_ENV=production node dist/CardSocketServer.js &",
     "dev": "nodemon --exec babel-node src/CardSocketServer.js"
   }
 }
